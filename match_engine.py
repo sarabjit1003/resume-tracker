@@ -1,7 +1,7 @@
 # match_engine.py
 
 from difflib import SequenceMatcher
-from resume_parser import extract_skills  # Assuming you import it here
+from resume_parser import extract_skills  
 
 def is_similar(a, b, threshold=0.8):
     return SequenceMatcher(None, a.lower(), b.lower()).ratio() >= threshold
