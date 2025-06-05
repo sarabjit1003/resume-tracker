@@ -7,7 +7,7 @@ from resume_parser import extract_text_from_pdf, extract_skills # Ensure these a
 
 st.set_page_config(page_title="Resume Screening Tool", layout="wide")
 
-# Custom CSS Styling
+#  CSS Styling
 st.markdown("""
     <style>
         .main { background-color: #fdf6f0; background-image: url('https://www.transparenttextures.com/patterns/white-wall.png'); }
@@ -21,7 +21,7 @@ st.markdown("""
 
 st.title("🌟 AI Resume Screener & Smart Match Tool")
 
-# Thought of the day (button-based reveal)
+# Thought of the day 
 thoughts = [
     "Small progress is still progress!",
     "You’re doing amazing, keep going!",
@@ -32,7 +32,7 @@ thoughts = [
 if st.button("💭 Click to see today's thought"):
     st.markdown(f"<div class='thought-box'>💡 {random.choice(thoughts)}</div>", unsafe_allow_html=True)
 
-# Timer section
+# Timer 
 if "start_time" not in st.session_state:
     st.session_state.start_time = None
     st.session_state.elapsed = 0
@@ -55,10 +55,8 @@ with col2:
 if st.session_state.start_time:
     st.caption(f"🕒 Time Running: {round(time.time() - st.session_state.start_time)} seconds")
 
-# ---
-# Skill Definitions for various roles
-# This dictionary provides a list of suggested skills for each role in the multiselect filter.
-# All skills here should be in lowercase for consistent display and matching.
+
+# This dictionary provides a list of suggested skills 
 
 ROLE_SPECIFIC_SKILLS = {
     "data_analyst": [
@@ -72,14 +70,14 @@ ROLE_SPECIFIC_SKILLS = {
         "google sheets", "campaign planning", "communication", "meta ads manager",
         "seo", "content writing", "ms excel", "analytics", "research", "branding", "public relations"
     ],
-    "hr": [ # Based on your provided HR resume skills
+    "hr": [
         "recruitment coordination", "ms excel", "hrms", "verbal communication", "written communication",
         "ms office", "excel pivot tables", "vlookup", "hr tools", "darwinbox", "sap",
         "empathy", "teamwork", "organizational skills", "recruitment & selection", "payroll basics",
         "employee engagement activities", "ms word", "hrms software", "resume screening",
         "employee engagement", "interview scheduling", "zoho people"
     ],
-    "fresher": [ # Based on your provided Fresher resume skills
+    "fresher": [ 
         "python", "sql basic", "ms excel", "google sheets", "communication", "time management",
         "analytical thinking", "presentation skills", "ms word", "powerpoint",
         "willingness to learn", "java", "html", "css", "creativity", "problem-solving",
@@ -118,7 +116,7 @@ if jd_file:
             all_available_skills.update(ROLE_SPECIFIC_SKILLS[selected_role])
         
         # Then, iterate through resumes in the selected folder to find any additional skills
-        # that might be present but not explicitly listed in ROLE_SPECIFIC_SKILLS
+        
         for resume_file in os.listdir(resume_folder_path):
             if resume_file.endswith(".pdf"):
                 resume_text_temp = extract_text_from_pdf(os.path.join(resume_folder_path, resume_file))
@@ -143,11 +141,11 @@ if jd_file:
 
         if searched_skills: # Only proceed if skills are selected
             for resume_file in os.listdir(resume_folder_path):
-                if resume_file.endswith(".pdf"): # Ensure we only process PDF files
+                if resume_file.endswith(".pdf"): # Ensure  PDF files
                     resume_path = os.path.join(resume_folder_path, resume_file)
                     resume_text = extract_text_from_pdf(resume_path)
                     
-                    # --- DEBUGGING LINE: OBSERVE THIS OUTPUT CAREFULLY ---
+                   
                     # Ensure resume_text is not empty from a failed extraction before passing to extract_skills
                     if resume_text: 
                         extracted_skills_for_debug = extract_skills(resume_text) # extract_skills now returns lowercase
@@ -155,23 +153,23 @@ if jd_file:
                     else:
                         extracted_skills_for_debug = []
                         st.warning(f"Could not extract text from {resume_file}. Skipping skill extraction.")
-                    # --- END DEBUGGING LINE ---
+                    
 
-                    # Use the extracted skills for matching (they are already lowercase from extract_skills)
+                    # Use the extracted skills for matching 
                     resume_skills_lower = extracted_skills_for_debug 
 
                     matched = [skill for skill in searched_skills if skill in resume_skills_lower]
                     missing = [skill for skill in searched_skills if skill not in resume_skills_lower]
                     
-                    # Clean the matched/missing lists to remove empty strings or very short strings if any
+                    # Clean the matched/missing lists to remove empty strings 
                     matched_clean = [s for s in matched if s.strip() and len(s) > 1]
                     missing_clean = [s for s in missing if s.strip() and len(s) > 1]
 
-                    # Calculate score only if there are skills to search for
+                    # Calculate score only 
                     if searched_skills:
                         score = int(len(matched_clean) / len(searched_skills) * 100)
                     else:
-                        score = 0 # If no skills are selected, score is 0
+                        score = 0 # If no skills are selected
 
                     if score >= min_score:
                         results.append({
@@ -179,7 +177,7 @@ if jd_file:
                             "Score (%)": score,
                             "Matched Skills": ', '.join(matched_clean),
                             "Missing Skills": ', '.join(missing_clean),
-                            "Text": resume_text, # Keep original text for potential future use (e.g., full preview)
+                            "Text": resume_text, # Keep original text for  future use
                             "Job Role": selected_role
                         })
                         if score >= 90:
@@ -188,7 +186,7 @@ if jd_file:
             if results:
                 results.sort(key=lambda x: x["Score (%)"], reverse=True) # Sort by score, highest first
                 df = pd.DataFrame(results)
-                df.index += 1 # Start index from 1 for better display
+                df.index += 1 # Start index from 1 
 
                 st.download_button(
                     label="📥 Download Results as CSV",
@@ -204,7 +202,7 @@ if jd_file:
                     st.markdown("**Matched Skills:** " + (res["Matched Skills"] or "None"))
                     st.markdown("**Missing Skills:** " + (res["Missing Skills"] or "None"))
 
-                    # Shortlist checkbox - unique key for each resume
+                    # Shortlist checkbox 
                     if st.checkbox("✅ Shortlist this resume", key=f"shortlist_{res['Resume']}"):
                         # Add to shortlisted if not already present
                         if not any(d['Resume'] == res['Resume'] for d in st.session_state.shortlisted):
@@ -215,7 +213,7 @@ if jd_file:
                             })
                             st.success(f"'{res['Resume']}' added to shortlisted candidates!")
 
-                    # Feedback text input - unique key for each resume
+                    # Feedback text input
                     feedback = st.text_input("💬 Feedback - How well did this resume fit?", key=f"feedback_{res['Resume']}", 
                                              value=st.session_state.feedback.get(res['Resume'], ""))
                     st.session_state.feedback[res['Resume']] = feedback # Store/update feedback
@@ -231,10 +229,10 @@ if jd_file:
             st.subheader("📋 Shortlisted Candidates")
             shortlisted_df = pd.DataFrame(st.session_state.shortlisted)
             
-            # Update feedback column with the latest from session state
+            # Update feedback 
             shortlisted_df["Feedback"] = shortlisted_df["Resume"].map(st.session_state.feedback)
 
-            # Allow filtering shortlisted candidates by job role
+            #  filtering shortlisted candidates by job role
             filter_job_shortlist = st.selectbox("Filter shortlisted candidates by Job Role:", 
                                                   ["All"] + list(shortlisted_df["Job Role"].unique()),
                                                   key="filter_job_shortlist_selectbox")
@@ -242,12 +240,12 @@ if jd_file:
                 shortlisted_df = shortlisted_df[shortlisted_df["Job Role"] == filter_job_shortlist]
 
             shortlisted_df.index = range(1, len(shortlisted_df) + 1) # Reset index for display
-            st.dataframe(shortlisted_df.drop(columns=["Text"]), use_container_width=True) # Exclude 'Text' column
+            st.dataframe(shortlisted_df.drop(columns=["Text"]), use_container_width=True)
 
             # Skill Popularity Chart for Shortlisted Candidates
             st.subheader("📈 Skill Popularity (Shortlisted Candidates)")
             if not shortlisted_df.empty:
-                # Aggregate skills from all currently displayed (filtered) shortlisted resumes
+                # Aggregate skills from all currently  shortlisted resumes
                 all_shortlisted_skills = []
                 for entry in shortlisted_df.to_dict('records'): # Iterate over dataframe rows as dicts
                     if entry["Matched Skills"]: # Check if skills exist for this entry
