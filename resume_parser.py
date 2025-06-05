@@ -1,13 +1,13 @@
 from pdfminer.high_level import extract_text
 import os
-import re # Import the regular expression module
+import re #  regular expression module
 
 def extract_text_from_pdf(pdf_path):
     """Extracts text from a PDF file using pdfminer.six."""
     try:
         return extract_text(pdf_path)
     except Exception as e:
-        # It's helpful to log the error path here
+       
         print(f"Error reading PDF {pdf_path}: {e}")
         return "" # Return an empty string if text extraction fails
 
@@ -18,11 +18,11 @@ def extract_skills(text):
     """
     text_lower = text.lower() # Convert entire text to lowercase once
 
-    # Define a comprehensive dictionary of skills and their common variations/tools using regex patterns.
-    # The keys are the standardized skill names (lowercase).
+    # Define  dictionary of skills using regex patterns.
+   
     # The values are regex patterns to match that skill in various forms.
     skill_patterns = {
-        # --- Marketing Skills (from previous discussions) ---
+        # Marketing Skills 
         "digital marketing": r"\b(digital\s*marketing|online\s*marketing|internet\s*marketing|digi\s*marketing)\b",
         "canva": r"\b(canva)\b",
         "content creation": r"\b(content\s*creation|content\s*development|content\s*strategy|content\s*writing|copywriting|blogging|article\s*writing)\b",
@@ -43,12 +43,12 @@ def extract_skills(text):
         "branding": r"\b(brand\s*management|branding)\b",
         "public relations": r"\b(public\s*relations|pr)\b",
 
-        # --- HR Skills (based on your provided resume content) ---
+        # HR Skills 
         "recruitment coordination": r"\b(recruitment\s*coordination|recruiting\s*coordinator)\b",
         "hrms": r"\b(hrms|human\s*resources\s*management\s*system)\b",
         "verbal communication": r"\b(verbal\s*communication|oral\s*communication)\b",
         "written communication": r"\b(written\s*communication)\b",
-        "ms office": r"\b(ms\s*office|microsoft\s*office|word|powerpoint)\b", # Already covered excel, but good to add base office suite
+        "ms office": r"\b(ms\s*office|microsoft\s*office|word|powerpoint)\b", 
         "excel pivot tables": r"\b(pivot\s*tables|excel\s*pivot\s*tables)\b",
         "vlookup": r"\b(vlookup)\b",
         "hr tools": r"\b(hr\s*tools)\b",
@@ -67,7 +67,7 @@ def extract_skills(text):
         "interview scheduling": r"\b(interview\s*scheduling|schedule\s*interviews)\b",
         "zoho people": r"\b(zoho\s*people)\b",
 
-        # --- Fresher Skills (based on your provided resume content) ---
+        # Fresher Skills 
         "python": r"\b(python|basic\s*python)\b",
         "sql basic": r"\b(sql\s*basic|basic\s*sql)\b",
         "html": r"\b(html)\b",
@@ -79,12 +79,10 @@ def extract_skills(text):
         "willingness to learn": r"\b(willingness\s*to\s*learn|eager\s*to\s*learn|fast\s*learner)\b",
         "java": r"\b(java)\b",
         "adaptability": r"\b(adaptability|adaptable)\b",
-        "ms office suite": r"\b(ms\s*office\s*suite|microsoft\s*office\s*suite|ms\s*office)\b", # Covers all basic office tools
-        "problem-solving": r"\b(problem\s*solving|problem-solving|troubleshooting)\b", # Already in general, but ensuring here
+        "ms office suite": r"\b(ms\s*office\s*suite|microsoft\s*office\s*suite|ms\s*office)\b", 
+        "problem-solving": r"\b(problem\s*solving|problem-solving|troubleshooting)\b",
         
-        # --- General Skills (from your original common_skills) ---
-        # (Some of these might overlap with more specific ones above, which is fine)
-        # 'excel' is now covered by 'ms excel'
+       
         'leadership': r"\b(leadership|leader|lead)\b",
         'project management': r"\b(project\s*management|pmp|agile|scrum)\b",
         'data analysis': r"\b(data\s*analysis|data\s*analyst|analyzing\s*data)\b",
@@ -95,7 +93,7 @@ def extract_skills(text):
         'tableau': r"\b(tableau)\b",
         'numpy': r"\b(numpy)\b",
         'pandas': r"\b(pandas)\b",
-        'customer service': r"\b(customer\s*service|client\s*service)\b", # Added as it's common for freshers/general
+        'customer service': r"\b(customer\s*service|client\s*service)\b", 
         'data entry': r"\b(data\s*entry)\b",
         'report writing': r"\b(report\s*writing|report\s*generation)\b",
         'critical thinking': r"\b(critical\s*thinking)\b",
